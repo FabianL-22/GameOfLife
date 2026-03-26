@@ -55,8 +55,12 @@ def randomize_screen(screen, density):
     return
 
 def print_screen(screen):
+    global generation
+    
     if sys.platform.startswith('win'):
         os.system("cls")
+    
+    print('GENERATION ' + str(generation))
     
     print('┌' + '──' * NUMBER_OF_COLS +  '─┐')
 
@@ -145,6 +149,8 @@ def iterate_screen(screen):
 #NUMBER_OF_COLS = int(input('> Number of columns: '))
 #NUMBER_OF_ROWS = int(input('> Number of rows: '))
 
+generation = 0
+
 screen = initalize_screen()
 
 randomize_screen(screen, 0.6)
@@ -152,6 +158,7 @@ print_screen(screen)
 
 while True:
     try:
+        generation += 1
         screen = iterate_screen(screen)
         print_screen(screen)
         time.sleep(0.5)

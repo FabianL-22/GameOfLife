@@ -1,10 +1,11 @@
 import sys
+import os
 import time
 import random
 import copy
 
-NUMBER_OF_COLS = 50
-NUMBER_OF_ROWS = 20
+NUMBER_OF_COLS = 55
+NUMBER_OF_ROWS = 25
 
 #screen = [['  ']*NUMBER_OF_COLS]*NUMBER_OF_ROWS
 
@@ -54,28 +55,34 @@ def randomize_screen(screen, density):
     return
 
 def print_screen(screen):
-    print('__' * NUMBER_OF_COLS + '_')
+    if sys.platform.startswith('win'):
+        os.system("cls")
+    
+    print('┌' + '──' * NUMBER_OF_COLS +  '─┐')
 
     alive_cells = 0
 
     # iterate through the rows of the screen
     for y in range(NUMBER_OF_ROWS):
+        print('│', end='')
         # iterate through current row
         for x in range(NUMBER_OF_COLS):
             try:
                 if screen[x][y] == 0:
-                    field = ' '
+                    field = '·'
                 elif screen[x][y] == 1:
                     field = '■'
                     alive_cells += 1
                 else:
                     field = str(screen[x][y])
-                print('|' + field, end='')
+                print(' ' + field, end='')
             except IndexError:
                 print('Fehler in make_screen_empty(): Falscher Index.')
-        print('|', end='\n')
+        print(' │', end='\n')
 
-    print('__' * NUMBER_OF_COLS + '_')
+    print('└' + '──' * NUMBER_OF_COLS +  '─┘')
+    
+    # calculate density of living cells
     density = alive_cells/(NUMBER_OF_COLS * NUMBER_OF_ROWS) * 100
     print('Living cells: ' + str(alive_cells) + ' / density: ' + format(density, '.2f')+ ' %')
 
@@ -147,6 +154,6 @@ while True:
     try:
         screen = iterate_screen(screen)
         print_screen(screen)
-        time.sleep(0.4)
+        time.sleep(0.5)
     except KeyboardInterrupt:
         sys.exit()

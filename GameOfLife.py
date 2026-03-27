@@ -6,7 +6,9 @@ import copy
 import logging
 
 logging.basicConfig(filename='GameOfLife_log.txt', level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-logging.disable(logging.INFO)
+# logging.disable(logging.INFO)
+
+logging.debug('GameOfLife.py started.')
 
 NUMBER_OF_COLS = 55
 NUMBER_OF_ROWS = 25
@@ -147,9 +149,14 @@ def iterate_screen(screen):
 generation = 0
 
 screen = initalize_screen()
+logging.debug('Initalized the screen.')
 
 randomize_screen(screen, 0.2)
+logging.debug('Screen randomly populated.')
+
 print_screen(screen)
+
+logging.debug('Game of life is running now.')
 
 while True:
     try:
@@ -158,4 +165,5 @@ while True:
         print_screen(screen)
         time.sleep(0.2)
     except KeyboardInterrupt:
+        logging.debug('Program exited by user input.')
         sys.exit()

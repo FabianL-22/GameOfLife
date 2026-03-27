@@ -3,11 +3,13 @@ import os
 import time
 import random
 import copy
+import logging
+
+logging.basicConfig(filename='GameOfLife_log.txt', level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
+logging.disable(logging.INFO)
 
 NUMBER_OF_COLS = 55
 NUMBER_OF_ROWS = 25
-
-#screen = [['  ']*NUMBER_OF_COLS]*NUMBER_OF_ROWS
 
 # gives an empty screen of the size NUMBER_OF_ROWS x NUMBER_OF_COLS
 def initalize_screen():
@@ -30,7 +32,7 @@ def make_screen_empty(screen):
             try:
                 screen[x][y] = 0
             except IndexError:
-                print('Fehler in make_screen_empty(): Falscher Index.')
+                logging.error('Error in make_screen_empty(): wrong index.')
 
 #    row = ['  ' for i in range(NUMBER_OF_COLS)]
 #    screen = [row for i in range(NUMBER_OF_ROWS)]
@@ -50,7 +52,7 @@ def randomize_screen(screen, density):
             try:
                 screen[x][y] = alive
             except IndexError:
-                print('Fehler in randomize_screen(): Falscher Index.')
+                logging.error('Error in randomize_screen(): wrong index.')
 
     return
 
@@ -81,7 +83,7 @@ def print_screen(screen):
                     field = str(screen[x][y])
                 print(' ' + field, end='')
             except IndexError:
-                print('Fehler in make_screen_empty(): Falscher Index.')
+                logging.error('Error in make_screen_empty(): wrong index.')
         print(' │', end='\n')
 
     print('└' + '──' * NUMBER_OF_COLS +  '─┘')
@@ -112,36 +114,29 @@ def iterate_screen(screen):
                         continue
                     # check for boundaries
                     if x + x_nn >= 0 and x + x_nn <= (NUMBER_OF_COLS - 1) and y + y_nn >= 0 and y + y_nn <= (NUMBER_OF_ROWS - 1):
+                    
                         try:
                             nn += screen[x + x_nn][y + y_nn]
                         except IndexError:
-                            print('Fehler in iterate_screen(): Falscher Index (' + str(x+x_nn) + ',' + str(y+y_nn) + ') beim Zählen der Nachbarn.')
+                            logging.error('Error in iterate_screen(): wrong index (' + str(x+x_nn) + ',' + str(y+y_nn) + ') while counting neighbours.')
 
             # apply game rules
             try:
                 if screen[x][y] == 1:
-                    #print('Cell at (' + str(x) + ',' + str(y) + ') has ' + str(nn) + ' neighbours', end='')
                     # cell is alive
                     if nn < 2 or nn > 3:
                         # cell dies of isolation or overpopulation
                         next_screen[x][y] = 0
-                        #print(' - dies.')
-                    #else:
-                        #print(' - nothing happens.')
                 elif screen[x][y] == 0:
-                    #print('No cell at (' + str(x) + ',' + str(y) + ') with ' + str(nn) + ' neighbours', end='')
                     # cell is dead
                     if nn == 3:
                         # new cell from reproduction
                         next_screen[x][y] = 1
-                        #print(' - new cell is created.')
-                    #else:
-                        #print(' - nothing happens.')
             except IndexError:
-                print('Fehler in iterate_screen(): Falscher Index.')
+                logging.error('Error in iterate_screen(): wrong index (' + str(x) + ',' + str(y) + ') while applying game rules.')
 
     if next_screen == screen:
-        print('Nothing happened.')
+        logging.info('Iteration did not change state of the cellular automaton.')
 
     # return iterated screen
     return next_screen
@@ -153,7 +148,7 @@ generation = 0
 
 screen = initalize_screen()
 
-randomize_screen(screen, 0.6)
+randomize_screen(screen, 0.2)
 print_screen(screen)
 
 while True:
@@ -161,6 +156,6 @@ while True:
         generation += 1
         screen = iterate_screen(screen)
         print_screen(screen)
-        time.sleep(0.5)
+        time.sleep(0.2)
     except KeyboardInterrupt:
         sys.exit()

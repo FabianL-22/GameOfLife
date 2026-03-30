@@ -6,7 +6,7 @@ import copy
 import logging
 
 logging.basicConfig(filename='GameOfLife_log.txt', level=logging.DEBUG, format=' %(asctime)s -  %(levelname)s -  %(message)s')
-# logging.disable(logging.INFO)
+logging.disable(logging.INFO)
 
 logging.debug('GameOfLife.py started.')
 

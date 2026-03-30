@@ -36,9 +36,6 @@ def make_screen_empty(screen):
             except IndexError:
                 logging.error('Error in make_screen_empty(): wrong index.')
 
-#    row = ['  ' for i in range(NUMBER_OF_COLS)]
-#    screen = [row for i in range(NUMBER_OF_ROWS)]
-
     return
 
 # randomly populates the screen with given density of cells
@@ -64,7 +61,7 @@ def print_screen(screen):
     if sys.platform.startswith('win'):
         os.system("cls")
     
-    print('GENERATION ' + str(generation))
+    print(f'GENERATION {generation}')
     
     print('┌' + '──' * NUMBER_OF_COLS +  '─┐')
 
@@ -92,7 +89,7 @@ def print_screen(screen):
     
     # calculate density of living cells
     density = alive_cells/(NUMBER_OF_COLS * NUMBER_OF_ROWS) * 100
-    print('Living cells: ' + str(alive_cells) + ' / density: ' + format(density, '.2f')+ ' %')
+    print(f'Living cells: {alive_cells} / density: {density:.2f} %')
 
     return
 
@@ -116,11 +113,11 @@ def iterate_screen(screen):
                         continue
                     # check for boundaries
                     if x + x_nn >= 0 and x + x_nn <= (NUMBER_OF_COLS - 1) and y + y_nn >= 0 and y + y_nn <= (NUMBER_OF_ROWS - 1):
-                    
+
                         try:
                             nn += screen[x + x_nn][y + y_nn]
                         except IndexError:
-                            logging.error('Error in iterate_screen(): wrong index (' + str(x+x_nn) + ',' + str(y+y_nn) + ') while counting neighbours.')
+                            logging.error(f'Error in iterate_screen(): wrong index ({x+x_nn},{y+y_nn}) while counting neighbours.')
 
             # apply game rules
             try:
@@ -135,7 +132,7 @@ def iterate_screen(screen):
                         # new cell from reproduction
                         next_screen[x][y] = 1
             except IndexError:
-                logging.error('Error in iterate_screen(): wrong index (' + str(x) + ',' + str(y) + ') while applying game rules.')
+                logging.error(f'Error in iterate_screen(): wrong index ({x},{y})  while applying game rules.')
 
     if next_screen == screen:
         logging.info('Iteration did not change state of the cellular automaton.')

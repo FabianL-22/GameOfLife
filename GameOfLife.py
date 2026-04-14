@@ -1,5 +1,5 @@
 import sys
-import os
+from subprocess import call
 import time
 import random
 import copy
@@ -59,7 +59,7 @@ def print_screen(screen):
     global generation
     
     if sys.platform.startswith('win'):
-        os.system("cls")
+        call("cls", shell=True)
     
     print(f'GENERATION {generation}')
     
